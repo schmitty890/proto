@@ -1,17 +1,14 @@
-var innercitydgkStats = require('../data/innercitydgk-stats.json');
-var yuppyvilleStats = require('../data/yuppyville-stats.json');
+var testdata = require('../data/testData.json');
 
 module.exports = function (app) {
   // Home Page
   app.get('/', function (req, res) {
     var hbsObject = {
-      yuppyvilleStats: yuppyvilleStats,
-      innercitydgkStats: innercitydgkStats
+      testdata: testdata
     }
-    // console.log(data);
-    console.log(hbsObject);
+    // console.log(hbsObject);
     res.render('index', {
-      title: 'Home',
+      title: 'Home', // pass any value to handlebar template
       hbsObject: hbsObject
     });
   });

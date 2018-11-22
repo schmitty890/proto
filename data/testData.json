@@ -1,0 +1,25 @@
+// sample json response that would be returned from an api
+[{
+  "team": "team one",
+  "owner": "owner one"
+},
+{
+  "team": "team two",
+  "owner": "owner two"
+},
+{
+  "team": "team three",
+  "owner": "owner three"
+},
+{
+  "team": "team four",
+  "owner": "owner four"
+},
+{
+  "team": "team five",
+  "owner": "owner five"
+},
+{
+  "team": "team six",
+  "owner": "owner six"
+}]
