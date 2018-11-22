@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const chalk = require('chalk');
 const errorHandler = require('errorhandler');
 const path = require('path');
-const sass = require('node-sass-middleware');
+// const sass = require('node-sass-middleware');
 const exphbs = require('express-handlebars');
 var lessMiddleware = require('less-middleware');
 
@@ -27,10 +27,10 @@ app.engine('handlebars', exphbs({
 }));
 app.set('view engine', 'handlebars');
 app.use(compression());
-app.use(sass({
-  src: path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public')
-}));
+// app.use(sass({
+//   src: path.join(__dirname, 'public'),
+//   dest: path.join(__dirname, 'public')
+// }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/build', express.static(__dirname + '/build'));

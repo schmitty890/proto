@@ -11,7 +11,7 @@ const rename = require('gulp-rename');
 const cleanCSS = require('gulp-clean-css');
 const gutil = require('gulp-util');
 const babel = require('gulp-babel');
-var less = require('gulp-less');
+const less = require('gulp-less');
 
 // when served, watch files. call browser-sync
 gulp.task('serve', ['browser-sync'], function() {
@@ -51,7 +51,7 @@ gulp.task('nodemon', ['less', 'concatScripts'], function(done) {
 
 // take the styles in styles.scss and convert them to .css and push them to the assets/css folder
 gulp.task('less', function() {
-  return gulp.src('public/assets/less/partials/*.less')
+  return gulp.src('public/assets/less/partials/bootstrap.less')
     .pipe(maps.init())
     .pipe(less())
     .pipe(cleanCSS())
