@@ -5,11 +5,15 @@ const express = require('express');
 const compression = require('compression');
 const bodyParser = require('body-parser');
 const chalk = require('chalk');
-const errorHandler = require('errorhandler');
 const path = require('path');
-// const sass = require('node-sass-middleware');
 const exphbs = require('express-handlebars');
-// var lessMiddleware = require('less-middleware');
+const fs = require('fs');
+
+/**
+ * Get static html folder
+ */
+const staticHTMLFolder = './public/pages';
+var staticHTMLpages = [];
 
 /**
  * Create Express server.
@@ -23,56 +27,36 @@ app.set('port', 8080);
 app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', exphbs({
   defaultLayout: 'main',
-  helpers: {}
+  helpers: {} // no handlebar helpers currently
 }));
 app.set('view engine', 'handlebars');
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/build', express.static(__dirname + '/build'));
-app.use('/public', express.static(__dirname + '/public'));
-// app.get('/static', (req, res) => {
-//   // console.log(req.route.path);
-//   console.log(req.route);
-//   res.sendFile(path.join(__dirname, 'public/pages/static.html'))
-// })
+// app.use('/public', express.static(__dirname + '/public'));
 
-// get all routes
-require('./controllers/html-routes.js')(app);
-
-// app.get('/static', function(req, res) {
-//   var pages = ['/static'];
-//   pages.includes(`${req.url}`);
-//   if(pages.includes(`${req.url}`)) {
-//     console.log('yeah its there');
-//   } else {
-//     console.log('nah its not here');
-//   }
-//   res.sendFile(path.join(__dirname, `public/pages${req.url}.html`));
-// });
-
-// check if there is a static html page, if there is show that html page, else show 404 page if no route has been hit
-app.get('*', function(req, res) {
-  var pages = ['/static'];
-  pages.includes(`${req.url}`);
-  if(pages.includes(`${req.url}`)) {
-    console.log('yeah its there');
-    res.sendFile(path.join(__dirname, `public/pages${req.url}.html`));
-  } else {
-    console.log('no its not there');
-    res.render('404', {
-      title: '404'
-    });
-  }
+/**
+ * Get list of all static html pages in project
+ */
+fs.readdir(staticHTMLFolder, (err, files) => {
+  files.forEach(file => {
+    file = file.split('.html')[0];
+    staticHTMLpages.push(`/${file}`);
+  });
 });
 
 /**
- * Error Handler.
+ * Get all routes
  */
-if (process.env.NODE_ENV === 'development') {
-  // only use in development
-  app.use(errorHandler());
-}
+require('./controllers/html-routes.js')(app);
+
+/**
+ * Check if there is a static html page, if there is show that html page, else show 404 page if no route has been hit
+ */
+app.get('*', function(req, res) {
+  staticHTMLpages.includes(`${req.url}`) ? res.sendFile(path.join(__dirname, `public/pages${req.url}.html`)) : res.render('404');
+});
 
 /**
  * Start Express server.
