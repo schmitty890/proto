@@ -9,7 +9,7 @@ const errorHandler = require('errorhandler');
 const path = require('path');
 // const sass = require('node-sass-middleware');
 const exphbs = require('express-handlebars');
-var lessMiddleware = require('less-middleware');
+// var lessMiddleware = require('less-middleware');
 
 /**
  * Create Express server.
@@ -27,23 +27,43 @@ app.engine('handlebars', exphbs({
 }));
 app.set('view engine', 'handlebars');
 app.use(compression());
-// app.use(sass({
-//   src: path.join(__dirname, 'public'),
-//   dest: path.join(__dirname, 'public')
-// }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/build', express.static(__dirname + '/build'));
 app.use('/public', express.static(__dirname + '/public'));
+// app.get('/static', (req, res) => {
+//   // console.log(req.route.path);
+//   console.log(req.route);
+//   res.sendFile(path.join(__dirname, 'public/pages/static.html'))
+// })
 
 // get all routes
 require('./controllers/html-routes.js')(app);
 
-// show 404 page if no route has been hit
+// app.get('/static', function(req, res) {
+//   var pages = ['/static'];
+//   pages.includes(`${req.url}`);
+//   if(pages.includes(`${req.url}`)) {
+//     console.log('yeah its there');
+//   } else {
+//     console.log('nah its not here');
+//   }
+//   res.sendFile(path.join(__dirname, `public/pages${req.url}.html`));
+// });
+
+// check if there is a static html page, if there is show that html page, else show 404 page if no route has been hit
 app.get('*', function(req, res) {
-  res.render('404', {
-    title: '404'
-  });
+  var pages = ['/static'];
+  pages.includes(`${req.url}`);
+  if(pages.includes(`${req.url}`)) {
+    console.log('yeah its there');
+    res.sendFile(path.join(__dirname, `public/pages${req.url}.html`));
+  } else {
+    console.log('no its not there');
+    res.render('404', {
+      title: '404'
+    });
+  }
 });
 
 /**

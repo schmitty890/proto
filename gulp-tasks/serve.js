@@ -15,7 +15,7 @@ const less = require('gulp-less');
 
 // when served, watch files. call browser-sync
 gulp.task('serve', ['browser-sync'], function() {
-  gulp.watch('public/assets/less/partials/*.less', ['less']);
+  gulp.watch('public/assets/less/*.less', ['less']);
   gulp.watch('public/assets/js/*/*.js', ['concatScripts']);
 });
 
@@ -51,7 +51,7 @@ gulp.task('nodemon', ['less', 'concatScripts'], function(done) {
 
 // take the styles in styles.scss and convert them to .css and push them to the assets/css folder
 gulp.task('less', function() {
-  return gulp.src('public/assets/less/partials/bootstrap.less')
+  return gulp.src('public/assets/less/bootstrap.less')
     .pipe(maps.init())
     .pipe(less())
     .pipe(cleanCSS())
